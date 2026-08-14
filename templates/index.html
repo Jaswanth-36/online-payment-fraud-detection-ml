@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Payment Fraud Detection</title>
+    <style>
+        :root { font-family: Arial, sans-serif; color: #172033; background: #f4f7fb; }
+        body { margin: 0; min-height: 100vh; display: grid; place-items: center; }
+        .card { width: min(92%, 520px); background: #fff; padding: 32px; border-radius: 18px; box-shadow: 0 12px 35px rgba(20, 35, 60, .10); }
+        h1 { margin-top: 0; font-size: 28px; }
+        .subtitle { color: #667085; line-height: 1.5; }
+        label { display: block; margin: 18px 0 7px; font-weight: 600; }
+        input { width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #d0d5dd; border-radius: 9px; font-size: 16px; }
+        button { width: 100%; margin-top: 24px; padding: 13px; border: 0; border-radius: 9px; background: #1d4ed8; color: white; font-size: 16px; font-weight: 700; cursor: pointer; }
+        .result, .error { margin-top: 22px; padding: 15px; border-radius: 10px; font-weight: 700; }
+        .success { background: #ecfdf3; color: #067647; }
+        .danger { background: #fef3f2; color: #b42318; }
+        .error { background: #fffaeb; color: #b54708; }
+        .note { margin-top: 20px; color: #667085; font-size: 13px; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <h1>Online Payment Fraud Detection</h1>
+        <p class="subtitle">Enter transaction details to receive a machine-learning prediction.</p>
+
+        <form action="{{ url_for('predict') }}" method="post">
+            <label for="amount">Transaction Amount</label>
+            <input id="amount" name="amount" type="number" min="0" step="0.01" required value="{{ form_data.get('amount', '') if form_data else '' }}">
+
+            <label for="oldbalanceOrg">Original Balance</label>
+            <input id="oldbalanceOrg" name="oldbalanceOrg" type="number" min="0" step="0.01" required value="{{ form_data.get('oldbalanceOrg', '') if form_data else '' }}">
+
+            <label for="newbalanceOrig">New Balance</label>
+            <input id="newbalanceOrig" name="newbalanceOrig" type="number" min="0" step="0.01" required value="{{ form_data.get('newbalanceOrig', '') if form_data else '' }}">
+
+            <button type="submit">Analyze Transaction</button>
+        </form>
+
+        {% if prediction_text %}
+            <div class="result {{ result_type }}">
+                {{ prediction_text }}
+                {% if probability is not none %}
+                    <div style="margin-top: 6px; font-weight: 400;">Model fraud probability: {{ "%.2f"|format(probability) }}%</div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <p class="note">This project is an educational demonstration. Predictions depend on the training data and should not be used as the sole basis for real financial decisions.</p>
+    </main>
+</body>
+</html>
