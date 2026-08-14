@@ -1,102 +1,286 @@
-# Online Payment Fraud Detection using Machine Learning
+# 🛡️ Online Payment Fraud Detection using Machine Learning
 
-A Flask-based machine-learning demonstration that classifies an online transaction as **potentially fraudulent** or **apparently legitimate** from three transaction features.
+A professional Flask + Machine Learning demonstration that analyzes online payment transaction details and classifies them as **potentially fraudulent** or **apparently legitimate**.
 
-> **Important:** This repository uses a reproducible **synthetic dataset** for educational purposes. It is not a production fraud-detection system and its predictions must not be used as the sole basis for real financial decisions.
+> **Important:** The current model is trained on a reproducible **synthetic dataset** created for an academic/portfolio demonstration. The sample transactions below are realistic usage examples, but they are **not real customer transactions**. This project must not be used as the sole basis for real financial decisions.
 
-## Features
+## ✨ What the Project Does
 
-- Random Forest classification model
-- Reproducible synthetic training data
-- Train/test split with stratification
-- Precision, recall, F1-score, confusion matrix, and ROC-AUC evaluation
-- Flask web interface for interactive predictions
-- Input validation and user-friendly error handling
-- Fraud-probability display when supported by the trained model
+The application takes three transaction values:
 
-## Tech Stack
+1. **Transaction Amount** — amount being transferred.
+2. **Original Balance** — account balance before the transaction.
+3. **New Balance** — account balance after the transaction.
 
-- Python 3.10+
-- Flask
-- NumPy
-- Pandas
-- Scikit-learn
-- HTML/CSS
+A trained Random Forest classifier analyzes these values and returns:
 
-## Project Structure
+- 🟢 **Transaction Appears Legitimate**, or
+- 🔴 **Potentially Fraudulent Transaction**
+- An estimated **fraud probability** when supported by the model.
+
+## 🖥️ Browser Experience
+
+The application opens as a modern dark dashboard with:
+
+- Responsive layout for desktop and mobile
+- Transaction input cards
+- Currency-aware amount fields
+- Model-ready status indicator
+- Clear success/fraud result panels
+- Fraud probability display
+- Input validation and helpful error messages
+- Sample transaction values for quick testing
+
+## 🧠 Machine Learning Workflow
+
+```text
+Synthetic Transaction Data
+          ↓
+Data Preparation
+          ↓
+Train / Test Split
+          ↓
+Random Forest Classifier
+          ↓
+Model Evaluation
+          ↓
+model.pkl
+          ↓
+Flask Web Application
+          ↓
+User Transaction Input
+          ↓
+Prediction + Fraud Probability
+```
+
+## 📂 Professional Project Structure
 
 ```text
 online-payment-fraud-detection-ml/
-├── app.py                 # Flask application and prediction endpoint
-├── model_training.py      # Dataset generation, training, and evaluation
-├── model.pkl              # Trained Random Forest model
-├── requirements.txt       # Python dependencies
-├── templates/
-│   └── index.html         # Web interface
-├── .gitignore             # Local/environment exclusions
-└── README.md              # Project documentation
+│
+├── app/
+│   ├── __init__.py
+│   ├── app.py                 # Flask routes and web application
+│   ├── templates/
+│   │   └── index.html         # Browser interface
+│   └── static/
+│       └── style.css          # Responsive dashboard styling
+│
+├── model/
+│   ├── __init__.py
+│   └── model.py               # Model loading and prediction service
+│
+├── training/
+│   ├── __init__.py
+│   └── model_training.py      # Dataset generation and model training
+│
+├── requirements/
+│   └── requirements.txt       # Python dependencies
+│
+├── model.pkl                  # Trained Random Forest model
+├── run.py                     # Simple application entry point
+├── .gitignore
+└── README.md
 ```
 
-## Getting Started
+## ⚙️ Run the Project on Windows
 
 ### 1. Clone the repository
 
-```bash
+```powershell
 git clone https://github.com/Jaswanth-36/online-payment-fraud-detection-ml.git
 cd online-payment-fraud-detection-ml
 ```
 
-### 2. Create and activate a virtual environment
-
-**Windows PowerShell:**
+### 2. Create a virtual environment
 
 ```powershell
 python -m venv venv
+```
+
+Activate it:
+
+```powershell
 .\venv\Scripts\Activate.ps1
 ```
 
-**Windows Command Prompt:**
+If PowerShell blocks activation, run this once in the same terminal:
 
-```cmd
-python -m venv venv
-venv\Scripts\activate
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+.\venv\Scripts\Activate.ps1
 ```
 
 ### 3. Install dependencies
 
-```bash
+```powershell
 python -m pip install --upgrade pip
-pip install -r requirements.txt
+pip install -r requirements/requirements.txt
 ```
 
-### 4. Train the model (optional if `model.pkl` is already present)
+### 4. Train / regenerate the model
 
-```bash
-python model_training.py
+Run this whenever you want to regenerate `model.pkl` from the current training code:
+
+```powershell
+python -m training.model_training
 ```
 
-The script creates the synthetic training data, evaluates the model, and saves the trained model as `model.pkl`.
+Example terminal output:
 
-### 5. Start the application
+```text
+=== Online Payment Fraud Detection | Model Evaluation ===
+              precision    recall  f1-score   support
 
-```bash
-python app.py
+           0      ...       ...       ...       ...
+           1      ...       ...       ...       ...
+
+Confusion matrix:
+[[... ...]
+ [... ...]]
+ROC-AUC: ...
+
+Model saved successfully: ...\model.pkl
 ```
 
-Open **http://127.0.0.1:5000** in a browser.
+The exact evaluation numbers can change if the training process or dataset is changed.
 
-## How It Works
+### 5. Start the web application
 
-1. The training script creates a reproducible synthetic transaction dataset.
-2. Transaction amount and balance features are used as model inputs.
-3. The data is split into training and test sets using stratification.
-4. A Random Forest classifier is trained and evaluated.
-5. The trained model is saved to `model.pkl`.
-6. Flask loads the model when the application starts.
-7. The web form validates user input and sends the transaction features to the model.
-8. The application displays the predicted class and, when available, the model's fraud probability.
+```powershell
+python run.py
+```
 
-## Model Evaluation
+You should see:
+
+```text
+ * Running on http://127.0.0.1:5000
+```
+
+Open this address in Chrome or another browser:
+
+**http://127.0.0.1:5000**
+
+### 6. Stop the application
+
+Return to the terminal and press:
+
+```text
+Ctrl + C
+```
+
+## 🧪 Sample Transactions and Expected Demonstration Outputs
+
+These examples show how the application can be tested. They are **demonstration scenarios**, not real banking records.
+
+### Example 1 — Normal-looking transaction
+
+| Field | Value |
+|---|---:|
+| Transaction Amount | ₹5,000 |
+| Original Balance | ₹10,000 |
+| New Balance | ₹5,000 |
+
+Typical result from the current trained demonstration model:
+
+```text
+Transaction Appears Legitimate
+Estimated fraud probability: approximately 3%
+```
+
+### Example 2 — High-risk demonstration transaction
+
+| Field | Value |
+|---|---:|
+| Transaction Amount | ₹9,000 |
+| Original Balance | ₹10,000 |
+| New Balance | ₹1,000 |
+
+Typical result from the current trained demonstration model:
+
+```text
+Potentially Fraudulent Transaction
+Estimated fraud probability: approximately 95%
+```
+
+### Example 3 — Small transaction
+
+| Field | Value |
+|---|---:|
+| Transaction Amount | ₹200 |
+| Original Balance | ₹5,000 |
+| New Balance | ₹4,800 |
+
+Typical result:
+
+```text
+Transaction Appears Legitimate
+```
+
+> The probability shown in the browser is model-dependent. If you retrain the model, the exact probability may change.
+
+## 🌐 What Happens in the Browser
+
+When you open the application, you will see:
+
+```text
+┌───────────────────────────────────────────────┐
+│ 🛡️ FraudGuard ML                             │
+│                                               │
+│       Online Payment Fraud Detection          │
+│ Analyze transaction details with ML           │
+│                                               │
+│  TRANSACTION ANALYSIS       ● Model Ready     │
+│                                               │
+│  Transaction Amount     Original Balance      │
+│  ₹ [ 5000             ] ₹ [ 10000          ] │
+│                                               │
+│  New Balance                                │
+│  ₹ [ 5000             ]                     │
+│                                               │
+│  [       Analyze Transaction            → ]  │
+│                                               │
+│  ✓ MODEL RESULT                               │
+│  Transaction Appears Legitimate               │
+│  Estimated fraud probability: 2.95%           │
+└───────────────────────────────────────────────┘
+```
+
+For a fraud prediction, the result card changes to a warning style and displays:
+
+```text
+⚠  MODEL RESULT
+   Potentially Fraudulent Transaction
+   Estimated fraud probability: 95.13%
+```
+
+## 🔍 How the Code Is Organized
+
+### `app/app.py`
+
+Handles the Flask web application and `/predict` endpoint. It receives form values, validates them, calls the model service, and sends the result back to the browser.
+
+### `model/model.py`
+
+Contains the reusable model-loading and prediction logic. This keeps machine-learning logic separate from the Flask web layer.
+
+### `training/model_training.py`
+
+Creates the reproducible demonstration dataset, trains the Random Forest model, evaluates it, and saves `model.pkl`.
+
+### `app/templates/index.html`
+
+Contains the user-facing browser interface.
+
+### `app/static/style.css`
+
+Contains the responsive visual design, dashboard layout, result cards, buttons, forms, and mobile styling.
+
+### `requirements/requirements.txt`
+
+Lists the Python packages required to install and run the project.
+
+## 📊 Model Evaluation
 
 The training script reports:
 
@@ -106,22 +290,46 @@ The training script reports:
 - Confusion matrix
 - ROC-AUC
 
-Accuracy alone is not sufficient for evaluating fraud-detection systems, particularly when fraud classes are imbalanced.
+These metrics provide more useful information than accuracy alone for fraud-detection problems.
 
-## Limitations
+## 🔐 Input Validation
 
-This is a **portfolio/academic demonstration**, not a real banking fraud engine. The labels are generated from an artificial risk rule rather than historical financial transactions. A production system would require a validated real-world dataset, stronger feature engineering, careful class-imbalance treatment, model monitoring, security controls, and domain validation.
+The application rejects:
 
-## Future Improvements
+- Empty required fields
+- Non-numeric transaction values
+- Negative amounts
+- Negative balances
+- Missing model files
 
-- Train on a validated real-world fraud dataset
-- Add additional transaction and account features
-- Compare multiple models and tune hyperparameters
-- Add automated tests and CI
-- Add authentication and audit logging for a deployed system
-- Deploy behind a production WSGI server
+Instead of showing a Python traceback in the browser, the user receives a clear error message.
 
-## Author
+## ⚠️ Current Model Limitation
+
+This project deliberately uses a synthetic dataset. The fraud labels are generated using an artificial demonstration risk rule rather than historical banking data.
+
+Therefore:
+
+- High probability does **not** mean a real transaction is actually fraudulent.
+- The model is suitable for demonstrating an end-to-end ML application.
+- It is not suitable for deployment in a real bank, payment gateway, or financial institution without substantial validation and redesign.
+
+## 🚀 Future Improvements
+
+- Replace synthetic data with a validated real-world fraud dataset.
+- Add transaction type, location, device, time and account-history features.
+- Handle severe class imbalance using validated techniques.
+- Compare Logistic Regression, Random Forest, XGBoost and other models.
+- Add automated unit and integration tests.
+- Add authentication and audit logging.
+- Add model versioning and monitoring.
+- Deploy using a production WSGI server and secure HTTPS configuration.
+
+## 👨‍💻 Author
 
 **Neerukattu Jaswanth**  
 Machine Learning & AI Enthusiast
+
+## ⭐ Project Goal
+
+This project demonstrates how a machine-learning model can be connected to a user-friendly Flask application to create an end-to-end prediction system—from **data generation and model training to browser-based prediction and result visualization**.
