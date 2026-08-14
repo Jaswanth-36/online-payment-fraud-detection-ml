@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FraudGuard ML transaction analysis result">
+    <title>Analysis Result | FraudGuard ML</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="result-page">
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div class="grid-overlay"></div>
+
+    <main class="page">
+        <header class="topbar">
+            <a class="brand brand-link" href="{{ url_for('home') }}"><span class="brand-mark">✦</span><span>FRAUDGUARD <b>ML</b></span></a>
+            <div class="live-status"><span class="live-dot"></span> ANALYSIS COMPLETE <span class="divider"></span><span id="liveClock">--:--:--</span></div>
+        </header>
+
+        <section class="result-hero">
+            <div class="eyebrow">TRANSACTION ANALYSIS REPORT</div>
+            <div class="decision-icon {{ result_class }}">{% if result_class == 'danger' %}⚠{% else %}✓{% endif %}</div>
+            <h1>{{ prediction_text }}</h1>
+            <p>The machine-learning model has completed its assessment using the transaction values provided.</p>
+            <div class="completed-badge"><span></span> Analysis completed just now</div>
+        </section>
+
+        <section class="output-grid">
+            <div class="glass-card report-card">
+                <div class="report-header">
+                    <div><div class="eyebrow">RISK ASSESSMENT</div><h2>Model result</h2></div>
+                    <div class="risk-label {{ result_class }}">{% if result_class == 'danger' %}HIGH RISK{% else %}LOW RISK{% endif %}</div>
+                </div>
+
+                <div class="probability-box">
+                    <div class="probability-heading"><span>Fraud probability</span><strong>{{ "%.2f"|format(probability) }}%</strong></div>
+                    <div class="large-risk-track"><div class="large-risk-fill {{ result_class }}" style="width: {{ probability }}%"></div></div>
+                    <div class="scale"><span>0% Low</span><span>50% Medium</span><span>100% High</span></div>
+                </div>
+
+                <div class="recommendation {{ result_class }}">
+                    <div class="recommendation-icon">{% if result_class == 'danger' %}!{% else %}✓{% endif %}</div>
+                    <div>
+                        <strong>{% if result_class == 'danger' %}Review recommended{% else %}No immediate risk signal{% endif %}</strong>
+                        <p>{% if result_class == 'danger' %}This transaction has been classified as potentially suspicious by the model. In a real system, additional verification would be appropriate.{% else %}The model did not identify a strong fraud signal from the supplied features. Normal business controls should still apply.{% endif %}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card transaction-card">
+                <div class="eyebrow">TRANSACTION SNAPSHOT</div>
+                <h2>Input details</h2>
+                <div class="transaction-row"><span>Transaction amount</span><strong>₹{{ "{:,.2f}".format(amount|float) }}</strong></div>
+                <div class="transaction-row"><span>Original balance</span><strong>₹{{ "{:,.2f}".format(old_balance|float) }}</strong></div>
+                <div class="transaction-row"><span>New balance</span><strong>₹{{ "{:,.2f}".format(new_balance|float) }}</strong></div>
+                <div class="transaction-row highlight"><span>Balance movement</span><strong>₹{{ "{:,.2f}".format((old_balance|float) - (new_balance|float)) }}</strong></div>
+                <div class="engine-note"><span class="mini-dot"></span><div><b>Random Forest</b><small>Model inference engine</small></div></div>
+            </div>
+        </section>
+
+        <section class="next-actions glass-card">
+            <div><div class="eyebrow">NEXT ACTION</div><h3>Run another transaction analysis</h3><p>Return to the dashboard and test another set of values.</p></div>
+            <a class="primary-link" href="{{ url_for('home') }}">← Analyze another payment</a>
+        </section>
+
+        <footer><span>FraudGuard ML • Educational demonstration</span><span>Model output is not proof of fraud or financial advice.</span></footer>
+    </main>
+
+    <script>
+        const clock = document.getElementById('liveClock');
+        const updateClock = () => clock.textContent = new Date().toLocaleTimeString([], {hour12: false});
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>
