@@ -1,175 +1,127 @@
-# 💳 Online Payment Fraud Detection using Machine Learning
+# Online Payment Fraud Detection using Machine Learning
 
-## 🎓 Major Final Year Project
+A Flask-based machine-learning demonstration that classifies an online transaction as **potentially fraudulent** or **apparently legitimate** from three transaction features.
 
-This project is a Machine Learning-based system designed to detect fraudulent online payment transactions.  
-It analyzes transaction features and predicts whether a transaction is **Legitimate** or **Fraudulent** using advanced ML algorithms.
+> **Important:** This repository uses a reproducible **synthetic dataset** for educational purposes. It is not a production fraud-detection system and its predictions must not be used as the sole basis for real financial decisions.
 
-The system also includes a Flask-based web application for real-time predictions.
+## Features
 
----
+- Random Forest classification model
+- Reproducible synthetic training data
+- Train/test split with stratification
+- Precision, recall, F1-score, confusion matrix, and ROC-AUC evaluation
+- Flask web interface for interactive predictions
+- Input validation and user-friendly error handling
+- Fraud-probability display when supported by the trained model
 
-## 📌 Problem Statement
+## Tech Stack
 
-Online payment systems are highly vulnerable to fraudulent transactions.  
-Detecting fraud accurately is challenging due to:
-
-- Highly imbalanced datasets
-- Large transaction volumes
-- Real-time processing requirements
-
-This project builds a reliable fraud detection model using Machine Learning techniques.
-
----
-
-## 🚀 Features
-
-- 🔍 Fraud detection using ML algorithms
-- 📊 Handles imbalanced datasets
-- 📈 Model performance evaluation (Precision, Recall, F1-score, ROC-AUC)
-- 🌐 Web interface using Flask
-- ⚡ Real-time transaction prediction
-- 📂 Clean project structure
-- 📉 Data visualization & analysis
-
----
-
-## 🛠 Tech Stack
-
-- Python
+- Python 3.10+
 - Flask
-- Scikit-learn
-- Pandas
 - NumPy
-- Matplotlib
-- Seaborn
-- HTML & CSS
+- Pandas
+- Scikit-learn
+- HTML/CSS
 
----
+## Project Structure
 
-## 📊 Machine Learning Models Used
-
-- Logistic Regression
-- Random Forest Classifier
-- (Optional) XGBoost
-- SMOTE (for handling class imbalance)
-
----
-
-## 📂 Project Structure
-
-fraud_detection_major_project/
-│
-├── app.py # Flask web application
-├── train_model.py # Model training script
-├── models/
-│ └── fraud_model.pkl # Trained model
+```text
+online-payment-fraud-detection-ml/
+├── app.py                 # Flask application and prediction endpoint
+├── model_training.py      # Dataset generation, training, and evaluation
+├── model.pkl              # Trained Random Forest model
+├── requirements.txt       # Python dependencies
 ├── templates/
-│ └── index.html # Web interface
-├── static/
-│ └── styles.css
-├── data/
-│ └── creditcard.csv
-├── requirements.txt
-└── README.md
+│   └── index.html         # Web interface
+├── .gitignore             # Local/environment exclusions
+└── README.md              # Project documentation
+```
 
+## Getting Started
 
----
+### 1. Clone the repository
 
-## ⚙️ Installation & Setup
-
-### 1️⃣ Clone the Repository
-
-git clone https://github.com/YOUR_USERNAME/online-payment-fraud-detection-ml.git
+```bash
+git clone https://github.com/Jaswanth-36/online-payment-fraud-detection-ml.git
 cd online-payment-fraud-detection-ml
+```
 
+### 2. Create and activate a virtual environment
 
----
+**Windows PowerShell:**
 
-### 2️⃣ Install Dependencies
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
 
+**Windows Command Prompt:**
+
+```cmd
+python -m venv venv
+venv\Scripts\activate
+```
+
+### 3. Install dependencies
+
+```bash
+python -m pip install --upgrade pip
 pip install -r requirements.txt
+```
 
+### 4. Train the model (optional if `model.pkl` is already present)
 
----
+```bash
+python model_training.py
+```
 
-### 3️⃣ Train the Model
+The script creates the synthetic training data, evaluates the model, and saves the trained model as `model.pkl`.
 
-python train_model.py
+### 5. Start the application
 
-
-This will generate:
-
-fraud_model.pkl
-
-
----
-
-### 4️⃣ Run the Web Application
-
+```bash
 python app.py
+```
 
+Open **http://127.0.0.1:5000** in a browser.
 
-Open browser:
+## How It Works
 
-http://127.0.0.1:5000
+1. The training script creates a reproducible synthetic transaction dataset.
+2. Transaction amount and balance features are used as model inputs.
+3. The data is split into training and test sets using stratification.
+4. A Random Forest classifier is trained and evaluated.
+5. The trained model is saved to `model.pkl`.
+6. Flask loads the model when the application starts.
+7. The web form validates user input and sends the transaction features to the model.
+8. The application displays the predicted class and, when available, the model's fraud probability.
 
+## Model Evaluation
 
----
+The training script reports:
 
-## 📈 Model Evaluation Metrics
-
-Since fraud detection datasets are highly imbalanced, we use:
-
-- Confusion Matrix
 - Precision
 - Recall
-- F1-Score
-- ROC-AUC Score
+- F1-score
+- Confusion matrix
+- ROC-AUC
 
-> Accuracy alone is not reliable for fraud detection problems.
+Accuracy alone is not sufficient for evaluating fraud-detection systems, particularly when fraud classes are imbalanced.
 
----
+## Limitations
 
-## 🧠 How It Works
+This is a **portfolio/academic demonstration**, not a real banking fraud engine. The labels are generated from an artificial risk rule rather than historical financial transactions. A production system would require a validated real-world dataset, stronger feature engineering, careful class-imbalance treatment, model monitoring, security controls, and domain validation.
 
-1. Dataset is preprocessed and cleaned.
-2. Data is split into training and testing sets.
-3. ML model is trained on transaction features.
-4. Model is evaluated using advanced metrics.
-5. Trained model is integrated into Flask app.
-6. User enters transaction details.
-7. System predicts fraud probability.
+## Future Improvements
 
----
+- Train on a validated real-world fraud dataset
+- Add additional transaction and account features
+- Compare multiple models and tune hyperparameters
+- Add automated tests and CI
+- Add authentication and audit logging for a deployed system
+- Deploy behind a production WSGI server
 
-## 🔮 Future Improvements
-
-- Deploy on AWS / Render / Heroku
-- Integrate real-time API-based fraud detection
-- Add Deep Learning models
-- Build interactive dashboard
-- Add user authentication system
-
----
-
-## 📚 Applications
-
-- Banking Systems
-- E-commerce Platforms
-- Online Payment Gateways
-- Financial Institutions
-
----
-
-## 👨‍💻 Author
+## Author
 
 **Neerukattu Jaswanth**  
-Final Year B.Tech Student  
-Machine Learning & AI Enthusiast  
-
----
-
-## ⭐ Support
-
-If you find this project useful, please give it a ⭐ on GitHub!
+Machine Learning & AI Enthusiast
