@@ -19,6 +19,9 @@ def predict():
         old_balance = float(form_data["oldbalanceOrg"])
         new_balance = float(form_data["newbalanceOrig"])
 
+        if any(value < 0 for value in (amount, old_balance, new_balance)):
+            raise ValueError("Negative values are not allowed.")
+
         prediction, probability = predict_transaction(
             amount, old_balance, new_balance
         )
@@ -31,11 +34,13 @@ def predict():
             result_class = "success"
 
         return render_template(
-            "index.html",
+            "output.html",
             prediction_text=result,
             result_class=result_class,
             probability=probability,
-            form_data=form_data,
+            amount=amount,
+            old_balance=old_balance,
+            new_balance=new_balance,
         )
 
     except (KeyError, TypeError, ValueError, FileNotFoundError) as exc:
