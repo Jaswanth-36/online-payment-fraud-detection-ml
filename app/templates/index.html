@@ -3,63 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FraudGuard | Online Payment Fraud Detection</title>
+    <meta name="description" content="FraudGuard ML - Online payment fraud detection demonstration">
+    <title>FraudGuard ML | Payment Risk Intelligence</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="background-glow glow-one"></div>
-    <div class="background-glow glow-two"></div>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div class="grid-overlay"></div>
 
-    <main class="shell">
+    <main class="page">
+        <header class="topbar">
+            <div class="brand"><span class="brand-mark">✦</span><span>FRAUDGUARD <b>ML</b></span></div>
+            <div class="live-status"><span class="live-dot"></span> MODEL ONLINE <span class="divider"></span><span id="liveClock">--:--:--</span></div>
+        </header>
+
         <section class="hero">
-            <div class="brand"><span class="brand-icon">🛡️</span> FraudGuard ML</div>
-            <h1>Online Payment<br><span>Fraud Detection</span></h1>
-            <p>Analyze transaction details with a machine-learning model and receive an instant risk assessment.</p>
-            <div class="badges">
-                <span>Random Forest</span><span>Flask</span><span>Real-time Demo</span>
-            </div>
+            <div class="eyebrow hero-eyebrow">PAYMENT RISK INTELLIGENCE</div>
+            <h1>Detect suspicious payments<br><span>before they become a problem.</span></h1>
+            <p>Enter transaction and balance information to receive an instant machine-learning risk assessment.</p>
+            <div class="tech-row"><span>RANDOM FOREST</span><span>FLASK API</span><span>INSTANT INFERENCE</span></div>
         </section>
 
-        <section class="card">
-            <div class="card-heading">
-                <div><p class="eyebrow">TRANSACTION ANALYSIS</p><h2>Enter transaction details</h2></div>
-                <div class="status-dot">● Model Ready</div>
-            </div>
-
-            <form action="{{ url_for('predict') }}" method="post">
-                <div class="field-grid">
-                    <label>Transaction Amount
-                        <div class="input-wrap"><span>₹</span><input name="amount" type="number" min="0" step="0.01" placeholder="e.g. 5000" required value="{{ form_data.get('amount', '') if form_data else '' }}"></div>
-                    </label>
-                    <label>Original Balance
-                        <div class="input-wrap"><span>₹</span><input name="oldbalanceOrg" type="number" min="0" step="0.01" placeholder="e.g. 10000" required value="{{ form_data.get('oldbalanceOrg', '') if form_data else '' }}"></div>
-                    </label>
-                    <label class="full">New Balance
-                        <div class="input-wrap"><span>₹</span><input name="newbalanceOrig" type="number" min="0" step="0.01" placeholder="e.g. 5000" required value="{{ form_data.get('newbalanceOrig', '') if form_data else '' }}"></div>
-                    </label>
+        <section class="dashboard">
+            <div class="analysis-card glass-card">
+                <div class="card-head">
+                    <div>
+                        <div class="eyebrow">LIVE TRANSACTION CHECK</div>
+                        <h2>Analyze a payment</h2>
+                        <p>Use the values recorded immediately before and after the transaction.</p>
+                    </div>
+                    <div class="model-pill"><span></span> READY</div>
                 </div>
-                <button type="submit"><span>Analyze Transaction</span><span>→</span></button>
-            </form>
 
-            {% if prediction_text %}
-            <div class="result {{ result_class }}">
-                <div class="result-icon">{% if result_class == 'danger' %}⚠{% else %}✓{% endif %}</div>
-                <div><p class="eyebrow">MODEL RESULT</p><h3>{{ prediction_text }}</h3>
-                {% if probability is not none %}<p>Estimated fraud probability: <strong>{{ "%.2f"|format(probability) }}%</strong></p>{% endif %}</div>
-            </div>
-            {% endif %}
+                <form id="transactionForm" action="{{ url_for('predict') }}" method="post">
+                    <div class="field-grid">
+                        <label>
+                            <span class="field-label">Transaction Amount</span>
+                            <div class="input-wrap"><span class="currency">₹</span><input name="amount" type="number" min="0" step="0.01" placeholder="5,000.00" required value="{{ form_data.get('amount', '') if form_data else '' }}"></div>
+                        </label>
+                        <label>
+                            <span class="field-label">Original Balance</span>
+                            <div class="input-wrap"><span class="currency">₹</span><input name="oldbalanceOrg" type="number" min="0" step="0.01" placeholder="10,000.00" required value="{{ form_data.get('oldbalanceOrg', '') if form_data else '' }}"></div>
+                        </label>
+                        <label class="full">
+                            <span class="field-label">New Balance</span>
+                            <div class="input-wrap"><span class="currency">₹</span><input name="newbalanceOrig" type="number" min="0" step="0.01" placeholder="5,000.00" required value="{{ form_data.get('newbalanceOrig', '') if form_data else '' }}"></div>
+                        </label>
+                    </div>
+                    <div class="balance-note"><span>ⓘ</span> The model compares the transaction amount with the balance movement.</div>
+                    <button id="analyzeButton" type="submit"><span class="button-icon">◈</span><span>Analyze Transaction</span><span class="button-arrow">→</span></button>
+                </form>
 
-            {% if error %}<div class="error">⚠ {{ error }}</div>{% endif %}
-
-            <div class="examples">
-                <p class="eyebrow">TRY A SAMPLE</p>
-                <div class="sample-row">
-                    <span>Amount ₹5,000</span><span>Old ₹10,000</span><span>New ₹5,000</span>
+                {% if prediction_text %}
+                <div class="result {{ result_class }}">
+                    <div class="result-top">
+                        <div class="result-icon">{% if result_class == 'danger' %}⚠{% else %}✓{% endif %}</div>
+                        <div><div class="eyebrow">MODEL DECISION</div><h3>{{ prediction_text }}</h3></div>
+                    </div>
+                    {% if probability is not none %}
+                    <div class="risk-row"><span>Fraud probability</span><strong>{{ "%.2f"|format(probability) }}%</strong></div>
+                    <div class="risk-track"><div class="risk-fill" style="width: {{ probability }}%"></div></div>
+                    {% endif %}
+                    <div class="result-meta"><span>Analysis completed</span><span id="resultTime">Just now</span></div>
                 </div>
+                {% endif %}
+
+                {% if error %}<div class="error">⚠ {{ error }}</div>{% endif %}
             </div>
+
+            <aside class="side-panel">
+                <div class="side-card glass-card">
+                    <div class="eyebrow">QUICK TEST</div>
+                    <h3>Try a realistic scenario</h3>
+                    <p>Load example values into the form with one click.</p>
+                    <button class="sample-btn" type="button" data-amount="5000" data-old="10000" data-new="5000"><span>Normal payment</span><b>₹5,000</b></button>
+                    <button class="sample-btn" type="button" data-amount="9000" data-old="10000" data-new="1000"><span>High-risk payment</span><b>₹9,000</b></button>
+                    <button class="sample-btn" type="button" data-amount="200" data-old="5000" data-new="4800"><span>Small payment</span><b>₹200</b></button>
+                </div>
+
+                <div class="side-card glass-card system-card">
+                    <div class="eyebrow">SYSTEM STATUS</div>
+                    <div class="status-line"><span>Model service</span><b><i></i> Online</b></div>
+                    <div class="status-line"><span>Inference</span><b><i></i> Instant</b></div>
+                    <div class="status-line"><span>Mode</span><b>Demo</b></div>
+                    <div class="status-line"><span>Engine</span><b>Random Forest</b></div>
+                </div>
+            </aside>
         </section>
 
-        <footer>Educational demonstration • Predictions should not be used as the sole basis for financial decisions.</footer>
+        <footer><span>FraudGuard ML • Educational demonstration</span><span>Predictions are not financial advice or proof of fraud.</span></footer>
     </main>
+
+    <script>
+        const clock = document.getElementById('liveClock');
+        const updateClock = () => clock.textContent = new Date().toLocaleTimeString([], {hour12: false});
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        document.querySelectorAll('.sample-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelector('[name="amount"]').value = button.dataset.amount;
+                document.querySelector('[name="oldbalanceOrg"]').value = button.dataset.old;
+                document.querySelector('[name="newbalanceOrig"]').value = button.dataset.new;
+                document.querySelector('[name="amount"]').focus();
+            });
+        });
+
+        const form = document.getElementById('transactionForm');
+        const analyzeButton = document.getElementById('analyzeButton');
+        form.addEventListener('submit', () => {
+            analyzeButton.classList.add('loading');
+            analyzeButton.querySelector('span:nth-child(2)').textContent = 'Analyzing transaction...';
+        });
+    </script>
 </body>
 </html>
